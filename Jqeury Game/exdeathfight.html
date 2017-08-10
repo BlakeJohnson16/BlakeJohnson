@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Final Fantasy Boss Fight!</title>
+
+  <!-- Bootstrap File -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+</head>
+<body>
+
+  <div class="container">
+    <div class="jumbotron">
+      <h1 class="text-center"><strong>Defeat Exdeath!</strong></h1>
+       <img src="Assets/Dissidia-Final-Fantasy-Exdeath.jpg" alt="Banner" class="img responsive center-block">
+      <h4 class="text-center">Defeat the evil Exdeath in a certain number of attacks before he uses the void to destroy everything!</h4>
+      <hr>
+      <div class="text-center">
+        <button class="btn btn-warning btn-md theme-button"><span class="glyphicon glyphicon-music"></span> Play Theme!</button>
+        <button class="btn btn-default btn-md pause-button"><span class="glyphicon glyphicon-pause"></span> Pause Song</button>
+      </div>
+
+    </div>  
+
+ <div class="container">
+ 	<div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Time for a decisive battle! The Evil Exdeath has gained control over the void! its up to you and this group of adventurers to take him down while he's channeling it so he doesnt destroy the world! Each party member has a specific attack value so you gotta find the right combination of attacks to bring him down in as little hits as possible. Good luck!</h3>
+          </div>
+         	 <div class="panel-body">
+			<p id="totalScoreText"><strong>Exdeath's Health: </strong></p>
+			<div class="col-md-3" id="chosenNumber"></div>
+			<div class="col-md-1" id="counters">
+				<p>Wins: <span id="wins">0</span></p>
+				<p>Losses: <span id="losses">0</span></p>
+		</div>
+			<div class="text-center" id="totalScore"></div>
+		</div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="container">
+   	<div class="row">
+   		<div class="col-lg-12">
+   		<h2 class="text-center"><strong>Your Party!</strong></h2>
+   		</div>
+   	</div>
+   	<div class="row">
+   		<div class="col-md-4">
+   			<h2 class="text-center">Fighter!</h2>
+   			<img src="Assets/Fighter.png" class="img responsive center-block" id="ftr">
+   		</div>
+   		<div class="col-md-4">
+   			<h2 class="text-center">Black Mage!</h2>
+   			<img src="Assets/black-mage.png" class="img responsive center-block" id="blm">
+   		</div>
+   		<div class="col-md-4">
+   			<h2 class="text-center">White Mage!</h2>
+   			<img src="Assets/white-mage.png" class="img responsive center-block" id="whm">
+   		</div>
+   	</div>
+  </div>
+  
+  <div class="container">
+  	<div class="row">
+  		<div class="col-lg-12">
+  		<br>
+  		<br>
+  		<br>
+  		<br>
+  		<br>
+  		<br>
+  		<br>
+  		</div>
+  	</div>
+  </div>
+
+
+	<script>
+$(document).ready(function() {
+
+var wins=0;
+var losses=0;
+
+var exdeathHealth=0;
+var fighter=0;
+var blackMage=0;
+var whiteMage=0;
+var damageDealt = 0;
+
+
+function startGame(){
+	exdeathHealth = Math.floor(Math.random()*120+19);
+	fighter = Math.floor(Math.random()*12+1);
+	blackMage = Math.floor(Math.random()*12+1);
+	whiteMage = Math.floor(Math.random()*12+1);
+	damageDealt = 0;
+	$('#totalScore').text(damageDealt);
+
+	$('#chosenNumber').text(exdeathHealth);
+}
+
+
+$('#ftr').on("click", function(){
+	damageDealt += fighter;
+	$('#totalScore').text(damageDealt);
+	endGame();
+});
+$('#blm').on("click", function(){
+	damageDealt += blackMage;
+	$('#totalScore').text(damageDealt);
+	endGame();
+});
+$('#whm').on("click", function(){
+	damageDealt += whiteMage;
+	$('#totalScore').text(damageDealt);
+	endGame();
+});
+
+function endGame(){
+	if (damageDealt===exdeathHealth) {
+		alert("You Win!");
+		wins++;
+		$('#wins').text(wins);
+		$('#totalScore').empty();
+		startGame();
+	}
+	if (damageDealt > exdeathHealth){
+		alert("You Lose!");
+		losses++;
+		$('#losses').text(losses);
+		$('#totalScore').empty();
+		startGame();
+	}
+}
+})
+
+
+
+ 	</script>
+ </body>
+ </html>

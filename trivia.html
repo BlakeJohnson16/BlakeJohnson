@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Final Fantasy Trivia!</title>
+ 
+</head>
+
+<body>
+
+ <h1>Welcome to Final Fantasy Trivia</h1>
+        
+     
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<button id="start_button">Begin!</button>
+<div id="timer"></div>
+<div id="question_div"></div>
+<div id="choices_div"></div>
+<div class="correct"></div>
+<div class="incorrect"></div>
+
+<script>
+
+
+//: found a plugin I could use to compact a couple of variables into a single one
+$.fn.trivia = function() {
+    var _t = this;
+    _t.userPick = null;
+    _t.answers = {
+        correct: 0,
+        incorrect: 0
+    };
+    _t.images = null;
+    _t.count = 30;
+    _t.current = 0;
+    _t.questions = [{
+        question: "Which character has made an appearance in every main line Final Fantasy game?",
+        choices: ["Cid", "Kane", "Bartz", "Terra"],
+        correct: 0
+    }, {
+        question: "Who is the Primal God of Fire?",
+        choices: ["Bahamut", "Ifrit", "Garuda", "Ramuh"],
+        correct: 1
+
+    }, {
+        question: "Who is the antagonist of the first Final Fantasy?",
+        choices: ["Exdeath", "Kefka", "Sephiroth", "Garland"],
+        correct: 3
+
+    }, {
+        question: "What is the sport both Tidus and his father Jecht play?",
+        choices: ["Aeroball", "Blitzball", "Crossball", "Fizzball"],
+        correct: 1
+
+    }, {
+        question: "What is the name of the theme for the final boss of Final Fantasy VI?",
+        choices: ["Dancing Mad", "Decisive Battle", "Demise", "One-Winged Angel"],
+        correct: 0
+
+    }, {
+        question: "What other game have characters from Final Fantasy are main characters?",
+        choices: ["Dragon Quest", "EverQuest", "Kingdom Hearts", "The World Ends With You"],
+        correct: 2
+
+    }, {
+        question: "What is the name of the signnature weapon used by Squall in Final Fantasy VIII?",
+        choices: ["Buster Sword", "Zantetsuken", "Gunblade", "Excalibur"],
+        correct: 2
+
+    }, {
+        question: "Which Final Fantasy game is the party member Auron from?",
+        choices: ["VII", "V", "XIV", "X"],
+        correct: 3
+    }];
+    _t.ask = function() {
+        if (_t.questions[_t.current]) {
+            $("#timer").html("Time remaining: " + "00:" + _t.count + " secs");
+            $("#question_div").html(_t.questions[_t.current].question);
+            var choicesArr = _t.questions[_t.current].choices;
+            var buttonsArr = [];
+
+            for (var i = 0; i < choicesArr.length; i++) {
+                var button = $('<button>');
+                button.text(choicesArr[i]);
+                button.attr('data-id', i);
+                $('#choices_div').append(button);
+            }
+            window.triviaCounter = setInterval(_t.timer, 1000);
+        } else {
+            $('body').append($('<div />', {
+                text: 'Unanswered: ' + (
+                    _t.questions.length - (_t.answers.correct + _t.answers.incorrect)),
+                class: 'result'
+            }));
+            $('#start_button').text('Restart').appendTo('body').show();
+        }
+    };
+    _t.timer = function() {
+        _t.count--;
+        if (_t.count <= 0) {
+            setTimeout(function() {
+                _t.nextQ();
+            });
+
+        } else {
+            $("#timer").html("Time remaining: " + "00:" + _t.count + " secs");
+        }
+    };
+    _t.nextQ = function() {
+        _t.current++;
+        clearInterval(window.triviaCounter);
+        _t.count = 30;
+        $('#timer').html("");
+        setTimeout(function() {
+            _t.cleanUp();
+            _t.ask();
+        }, 1000)
+    };
+    _t.cleanUp = function() {
+        $('div[id]').each(function(item) {
+            $(this).html('');
+        });
+        $('.correct').html('Correct answers: ' + _t.answers.correct);
+        $('.incorrect').html('Incorrect answers: ' + _t.answers.incorrect);
+    };
+    _t.answer = function(correct) {
+        var string = correct ? 'correct' : 'incorrect';
+        _t.answers[string]++;
+        $('.' + string).html(string + ' answers: ' + _t.answers[string]);
+    };
+    return _t;
+};
+var Trivia;
+
+$("#start_button").click(function() {
+    $(this).hide();
+    $('.result').remove();
+    $('div').html('');
+    Trivia = new $(window).trivia();
+    Trivia.ask();
+});
+
+$('#choices_div').on('click', 'button', function(e) {
+    var userPick = $(this).data("id"),
+        _t = Trivia || $(window).trivia(),
+        index = _t.questions[_t.current].correct,
+        correct = _t.questions[_t.current].choices[index];
+
+    if (userPick !== index) {
+        $('#choices_div').text("Wrong Answer! The correct answer was: " + correct);
+        _t.answer(false);
+    } else {
+        $('#choices_div').text("Correct!!! The correct answer was: " + correct);
+        _t.answer(true);
+    }
+    _t.nextQ();
+});
+
+
+</script>
+</body>
+</html>
